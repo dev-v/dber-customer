@@ -1,0 +1,192 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dber.customer.mapper.IShopFocusMapper">
+
+    <select id="get" resultType="ShopFocus">
+		select * from shop_focus where id=#{id}
+	</select>
+
+    <delete id="del">
+		delete from shop_focus where id = #{id}
+	</delete>
+
+    <select id="gets" resultType="ShopFocus">
+        SELECT * FROM shop_focus WHERE id IN
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+    </select>
+
+    <sql id="maxLimit">
+		limit 1000
+	</sql>
+
+    <delete id="dels">
+        delete from shop_focus where id in
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+        <include refid="maxLimit"></include>
+    </delete>
+
+    <delete id="delByCondition">
+        delete from shop_focus
+        <include refid="where"></include>
+    </delete>
+
+    <sql id="insertList">
+		(
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				id,
+			</if>
+			<if test="customerId!=null">
+				customer_id,
+			</if>
+			<if test="shopId!=null">
+				shop_id,
+			</if>
+			<if test="customerName!=null">
+				customer_name,
+			</if>
+			<if test="shopName!=null">
+				shop_name,
+			</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				#{id},
+			</if>
+			<if test="customerId!=null">
+				#{customerId},
+			</if>
+			<if test="shopId!=null">
+				#{shopId},
+			</if>
+			<if test="customerName!=null">
+				#{customerName},
+			</if>
+			<if test="shopName!=null">
+				#{shopName},
+			</if>
+		</trim>
+
+		)
+	</sql>
+
+    <!-- 注意检查非空和主键自增属性 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert
+        into shop_focus
+        <include refid="insertList"></include>
+    </insert>
+
+    <update id="update">
+        update shop_focus
+        <set>
+            			<if test="customerId != null ">
+				customer_id=#{customerId},
+			</if>
+			<if test="shopId != null ">
+				shop_id=#{shopId},
+			</if>
+			<if test="customerName != null ">
+				customer_name=#{customerName},
+			</if>
+			<if test="shopName != null ">
+				shop_name=#{shopName},
+			</if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        <!-- 不包含数据库类型为TIMESTAMP（由数据库自动管理）的列 -->
+        insert into shop_focus
+        <include refid="insertList"></include>
+        ON DUPLICATE KEY
+        UPDATE
+        <trim suffixOverrides=",">
+            			<if test="customerId != null ">
+				customer_id=values(customer_id),
+			</if>
+			<if test="shopId != null ">
+				shop_id=values(shop_id),
+			</if>
+			<if test="customerName != null ">
+				customer_name=values(customer_name),
+			</if>
+			<if test="shopName != null ">
+				shop_name=values(shop_name),
+			</if>
+
+        </trim>
+    </insert>
+
+    <sql id="queryList">
+		select id,customer_id,shop_id,customer_name,shop_name,create_time from
+		shop_focus
+	</sql>
+
+    <sql id="where">
+        <trim prefix="WHERE" prefixOverrides="AND">
+            			<if test="id != null">
+				AND id=#{id}
+			</if>
+			<if test="customerId != null">
+				AND customer_id=#{customerId}
+			</if>
+			<if test="shopId != null">
+				AND shop_id=#{shopId}
+			</if>
+			<if test="customerName != null">
+				AND customer_name=#{customerName}
+			</if>
+			<if test="shopName != null">
+				AND shop_name=#{shopName}
+			</if>
+			<if test="createTime != null">
+				AND create_time=#{createTime}
+			</if>
+
+        </trim>
+    </sql>
+
+    <select id="query" resultType="ShopFocus">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+    </select>
+
+    <select id="queryWithoutPage" resultType="ShopFocus">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+    <select id="queryOne" resultType="ShopFocus">
+        select * from shop_focus
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="has" resultType="int">
+        select 1 from shop_focus
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from shop_focus
+        <include refid="where"></include>
+    </select>
+
+    <select id="getIds" resultType="long">
+        select id from shop_focus
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+</mapper>

@@ -1,0 +1,300 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dber.customer.mapper.IShopVipCardCustomerMapper">
+
+    <select id="get" resultType="ShopVipCardCustomer">
+		select * from shop_vip_card_customer where id=#{id}
+	</select>
+
+    <delete id="del">
+		delete from shop_vip_card_customer where id = #{id}
+	</delete>
+
+    <select id="gets" resultType="ShopVipCardCustomer">
+        SELECT * FROM shop_vip_card_customer WHERE id IN
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+    </select>
+
+    <sql id="maxLimit">
+		limit 1000
+	</sql>
+
+    <delete id="dels">
+        delete from shop_vip_card_customer where id in
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+        <include refid="maxLimit"></include>
+    </delete>
+
+    <delete id="delByCondition">
+        delete from shop_vip_card_customer
+        <include refid="where"></include>
+    </delete>
+
+    <sql id="insertList">
+		(
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				id,
+			</if>
+			<if test="shopId!=null">
+				shop_id,
+			</if>
+			<if test="customerId!=null">
+				customer_id,
+			</if>
+			<if test="shopVipCardId!=null">
+				shop_vip_card_id,
+			</if>
+			<if test="days!=null">
+				days,
+			</if>
+			<if test="price!=null">
+				price,
+			</if>
+			<if test="status!=null">
+				_status,
+			</if>
+			<if test="shopName!=null">
+				shop_name,
+			</if>
+			<if test="customerName!=null">
+				customer_name,
+			</if>
+			<if test="cardName!=null">
+				card_name,
+			</if>
+			<if test="activeDate!=null">
+				active_date,
+			</if>
+			<if test="transferDate!=null">
+				transfer_date,
+			</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				#{id},
+			</if>
+			<if test="shopId!=null">
+				#{shopId},
+			</if>
+			<if test="customerId!=null">
+				#{customerId},
+			</if>
+			<if test="shopVipCardId!=null">
+				#{shopVipCardId},
+			</if>
+			<if test="days!=null">
+				#{days},
+			</if>
+			<if test="price!=null">
+				#{price},
+			</if>
+			<if test="status!=null">
+				#{status},
+			</if>
+			<if test="shopName!=null">
+				#{shopName},
+			</if>
+			<if test="customerName!=null">
+				#{customerName},
+			</if>
+			<if test="cardName!=null">
+				#{cardName},
+			</if>
+			<if test="activeDate!=null">
+				#{activeDate},
+			</if>
+			<if test="transferDate!=null">
+				#{transferDate},
+			</if>
+		</trim>
+
+		)
+	</sql>
+
+    <!-- 注意检查非空和主键自增属性 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert
+        into shop_vip_card_customer
+        <include refid="insertList"></include>
+    </insert>
+
+    <update id="update">
+        update shop_vip_card_customer
+        <set>
+            			<if test="shopId != null ">
+				shop_id=#{shopId},
+			</if>
+			<if test="customerId != null ">
+				customer_id=#{customerId},
+			</if>
+			<if test="shopVipCardId != null ">
+				shop_vip_card_id=#{shopVipCardId},
+			</if>
+			<if test="days != null ">
+				days=#{days},
+			</if>
+			<if test="price != null ">
+				price=#{price},
+			</if>
+			<if test="status != null ">
+				_status=#{status},
+			</if>
+			<if test="shopName != null ">
+				shop_name=#{shopName},
+			</if>
+			<if test="customerName != null ">
+				customer_name=#{customerName},
+			</if>
+			<if test="cardName != null ">
+				card_name=#{cardName},
+			</if>
+			<if test="activeDate != null ">
+				active_date=#{activeDate},
+			</if>
+			<if test="transferDate != null ">
+				transfer_date=#{transferDate},
+			</if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        <!-- 不包含数据库类型为TIMESTAMP（由数据库自动管理）的列 -->
+        insert into shop_vip_card_customer
+        <include refid="insertList"></include>
+        ON DUPLICATE KEY
+        UPDATE
+        <trim suffixOverrides=",">
+            			<if test="shopId != null ">
+				shop_id=values(shop_id),
+			</if>
+			<if test="customerId != null ">
+				customer_id=values(customer_id),
+			</if>
+			<if test="shopVipCardId != null ">
+				shop_vip_card_id=values(shop_vip_card_id),
+			</if>
+			<if test="days != null ">
+				days=values(days),
+			</if>
+			<if test="price != null ">
+				price=values(price),
+			</if>
+			<if test="status != null ">
+				_status=values(_status),
+			</if>
+			<if test="shopName != null ">
+				shop_name=values(shop_name),
+			</if>
+			<if test="customerName != null ">
+				customer_name=values(customer_name),
+			</if>
+			<if test="cardName != null ">
+				card_name=values(card_name),
+			</if>
+			<if test="activeDate != null ">
+				active_date=values(active_date),
+			</if>
+			<if test="transferDate != null ">
+				transfer_date=values(transfer_date),
+			</if>
+
+        </trim>
+    </insert>
+
+    <sql id="queryList">
+		select id,shop_id,shop_vip_card_id,customer_id,days,price,_status,shop_name,customer_name,card_name,active_date,transfer_date,create_time,modify_time from
+		shop_vip_card_customer
+	</sql>
+
+    <sql id="where">
+        <trim prefix="WHERE" prefixOverrides="AND">
+            			<if test="id != null">
+				AND id=#{id}
+			</if>
+			<if test="shopId != null">
+				AND shop_id=#{shopId}
+			</if>
+			<if test="customerId != null">
+				AND customer_id=#{customerId}
+			</if>
+			<if test="shopVipCardId != null">
+				AND shop_vip_card_id=#{shopVipCardId}
+			</if>
+			<if test="days != null">
+				AND days=#{days}
+			</if>
+			<if test="price != null">
+				AND price=#{price}
+			</if>
+			<if test="status != null">
+				AND _status=#{status}
+			</if>
+			<if test="shopName != null">
+				AND shop_name=#{shopName}
+			</if>
+			<if test="customerName != null">
+				AND customer_name=#{customerName}
+			</if>
+			<if test="cardName != null">
+				AND card_name=#{cardName}
+			</if>
+			<if test="activeDate != null">
+				AND active_date=#{activeDate}
+			</if>
+			<if test="transferDate != null">
+				AND transfer_date=#{transferDate}
+			</if>
+			<if test="createTime != null">
+				AND create_time=#{createTime}
+			</if>
+			<if test="modifyTime != null">
+				AND modify_time=#{modifyTime}
+			</if>
+
+        </trim>
+    </sql>
+
+    <select id="query" resultType="ShopVipCardCustomer">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+    </select>
+
+    <select id="queryWithoutPage" resultType="ShopVipCardCustomer">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+    <select id="queryOne" resultType="ShopVipCardCustomer">
+        select * from shop_vip_card_customer
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="has" resultType="int">
+        select 1 from shop_vip_card_customer
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from shop_vip_card_customer
+        <include refid="where"></include>
+    </select>
+
+    <select id="getIds" resultType="long">
+        select id from shop_vip_card_customer
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+</mapper>

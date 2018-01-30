@@ -1,0 +1,162 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dber.customer.mapper.ICustomerHolidayMapper">
+
+    <select id="get" resultType="CustomerHoliday">
+		select * from customer_holiday where id=#{id}
+	</select>
+
+    <delete id="del">
+		delete from customer_holiday where id = #{id}
+	</delete>
+
+    <select id="gets" resultType="CustomerHoliday">
+        SELECT * FROM customer_holiday WHERE id IN
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+    </select>
+
+    <sql id="maxLimit">
+		limit 1000
+	</sql>
+
+    <delete id="dels">
+        delete from customer_holiday where id in
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">#{item}
+        </foreach>
+        <include refid="maxLimit"></include>
+    </delete>
+
+    <delete id="delByCondition">
+        delete from customer_holiday
+        <include refid="where"></include>
+    </delete>
+
+    <sql id="insertList">
+		(
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				id,
+			</if>
+			<if test="customerId!=null">
+				customer_id,
+			</if>
+			<if test="date!=null">
+				_date,
+			</if>
+		</trim>
+		) values (
+		<trim suffixOverrides=",">
+			<if test="id!=null">
+				#{id},
+			</if>
+			<if test="customerId!=null">
+				#{customerId},
+			</if>
+			<if test="date!=null">
+				#{date},
+			</if>
+		</trim>
+
+		)
+	</sql>
+
+    <!-- 注意检查非空和主键自增属性 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert
+        into customer_holiday
+        <include refid="insertList"></include>
+    </insert>
+
+    <update id="update">
+        update customer_holiday
+        <set>
+            			<if test="customerId != null ">
+				customer_id=#{customerId},
+			</if>
+			<if test="date != null ">
+				_date=#{date},
+			</if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        <!-- 不包含数据库类型为TIMESTAMP（由数据库自动管理）的列 -->
+        insert into customer_holiday
+        <include refid="insertList"></include>
+        ON DUPLICATE KEY
+        UPDATE
+        <trim suffixOverrides=",">
+            			<if test="customerId != null ">
+				customer_id=values(customer_id),
+			</if>
+			<if test="date != null ">
+				_date=values(_date),
+			</if>
+
+        </trim>
+    </insert>
+
+    <sql id="queryList">
+		select id,customer_id,_date,modify_time from
+		customer_holiday
+	</sql>
+
+    <sql id="where">
+        <trim prefix="WHERE" prefixOverrides="AND">
+            			<if test="id != null">
+				AND id=#{id}
+			</if>
+			<if test="customerId != null">
+				AND customer_id=#{customerId}
+			</if>
+			<if test="date != null">
+				AND _date=#{date}
+			</if>
+			<if test="modifyTime != null">
+				AND modify_time=#{modifyTime}
+			</if>
+
+        </trim>
+    </sql>
+
+    <select id="query" resultType="CustomerHoliday">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+    </select>
+
+    <select id="queryWithoutPage" resultType="CustomerHoliday">
+        <include refid="queryList"></include>
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+    <select id="queryOne" resultType="CustomerHoliday">
+        select * from customer_holiday
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="has" resultType="int">
+        select 1 from customer_holiday
+        <include refid="where"></include>
+        limit 1
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from customer_holiday
+        <include refid="where"></include>
+    </select>
+
+    <select id="getIds" resultType="long">
+        select id from customer_holiday
+        <include refid="where"></include>
+        <include refid="maxLimit"></include>
+    </select>
+
+</mapper>
