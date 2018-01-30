@@ -1,11 +1,11 @@
 package com.dber.customer.web.controller;
 
+import com.dber.base.login.LoginCheckController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dber.base.service.IService;
-import com.dber.base.web.controller.AbstractController;
 import com.dber.customer.api.entity.ShopVipCardCustomer;
 import com.dber.customer.service.IShopVipCardCustomerService;
 
@@ -21,13 +21,9 @@ import com.dber.customer.service.IShopVipCardCustomerService;
  */
 @RestController
 @RequestMapping("/shop_vip_card_customer")
-public class ShopVipCardCustomerController extends AbstractController<ShopVipCardCustomer> {
+public class ShopVipCardCustomerController extends LoginCheckController {
 
 	@Autowired
 	private IShopVipCardCustomerService service;
 
-	@Override
-	protected IService<ShopVipCardCustomer> getService() {
-		return this.service;
-	}
 }

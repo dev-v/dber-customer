@@ -1,11 +1,11 @@
 package com.dber.customer.web.controller;
 
+import com.dber.base.login.LoginCheckController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dber.base.service.IService;
-import com.dber.base.web.controller.AbstractController;
 import com.dber.customer.api.entity.ShopSiteCustomerBooking;
 import com.dber.customer.service.IShopSiteCustomerBookingService;
 
@@ -21,13 +21,9 @@ import com.dber.customer.service.IShopSiteCustomerBookingService;
  */
 @RestController
 @RequestMapping("/shop_site_customer_booking")
-public class ShopSiteCustomerBookingController extends AbstractController<ShopSiteCustomerBooking> {
+public class ShopSiteCustomerBookingController extends LoginCheckController {
 
 	@Autowired
 	private IShopSiteCustomerBookingService service;
 
-	@Override
-	protected IService<ShopSiteCustomerBooking> getService() {
-		return this.service;
-	}
 }

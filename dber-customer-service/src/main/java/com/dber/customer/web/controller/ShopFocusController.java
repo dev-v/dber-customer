@@ -1,11 +1,11 @@
 package com.dber.customer.web.controller;
 
+import com.dber.base.login.LoginCheckController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dber.base.service.IService;
-import com.dber.base.web.controller.AbstractController;
 import com.dber.customer.api.entity.ShopFocus;
 import com.dber.customer.service.IShopFocusService;
 
@@ -21,13 +21,9 @@ import com.dber.customer.service.IShopFocusService;
  */
 @RestController
 @RequestMapping("/shop_focus")
-public class ShopFocusController extends AbstractController<ShopFocus> {
+public class ShopFocusController extends LoginCheckController{
 
 	@Autowired
 	private IShopFocusService service;
 
-	@Override
-	protected IService<ShopFocus> getService() {
-		return this.service;
-	}
 }

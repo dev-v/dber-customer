@@ -1,12 +1,10 @@
 package com.dber.customer.web.controller;
 
+import com.dber.base.login.LoginCheckController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dber.base.service.IService;
-import com.dber.base.web.controller.AbstractController;
-import com.dber.customer.api.entity.CustomerHoliday;
 import com.dber.customer.service.ICustomerHolidayService;
 
 /**
@@ -21,13 +19,9 @@ import com.dber.customer.service.ICustomerHolidayService;
  */
 @RestController
 @RequestMapping("/customer_holiday")
-public class CustomerHolidayController extends AbstractController<CustomerHoliday> {
+public class CustomerHolidayController extends LoginCheckController {
 
 	@Autowired
 	private ICustomerHolidayService service;
 
-	@Override
-	protected IService<CustomerHoliday> getService() {
-		return this.service;
-	}
 }
